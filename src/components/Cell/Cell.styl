@@ -1,0 +1,30 @@
+.cell
+    float left
+    border-top 1px solid #333
+    border-left 1px solid #222
+    cursor pointer
+    
+    &_state
+    
+        &_alive
+            background-color #fbb
+
+        &_old
+            background-color #e44
+
+        &_dead
+            background-color black
+  
+    &_size
+    
+        &_small
+            width 11px
+            height @width
+      
+        &_medium
+            width 12px
+            height @width
+      
+        &_large
+            width 13px
+            height @width
