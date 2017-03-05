@@ -2,40 +2,32 @@ import React from 'react';
 import './ControlGridSize.styl';
 import Title from '../Title/Title';
 import Button from '../Button/Button';
+import ControlGrid from '../ControlGrid/ControlGrid';
 import * as Size from '../../constants/Size'
 
-export default function ControlGridSize({ activeSize, onSetSize }) {
-    const formatText = ([x, y]) => `Size: ${y}x${x}`;
 
+const formatText = ([x, y]) => `Size: ${y}x${x}`;
+
+const renderButtonItems = (activeSize, onSetSize) => (
+    Object.values(Size).map((size, i) => ( 
+        <Button 
+            text={formatText(size)}
+            size='flat'
+            isActive={size == activeSize}
+            onClick={() => onSetSize(size)}
+            key={i.toString()}
+        /> 
+    ))
+);
+
+const ControlGridSize = ({ activeSize, onSetSize }) => { 
     return (
         <div className='control-grid-size'>
-            <span className='control-grid-size__title'>
-                <Title text='grid size:'/>
-            </span>
-            <div className='control-grid-size__button'>
-                <Button 
-                    text={formatText(Size.SMALL)}
-                    size='flat'
-                    isActive={Size.SMALL == activeSize}
-                    onClick={() => onSetSize(Size.SMALL)}
-                />
-            </div>
-            <div className='control-grid-size__button'>
-                <Button 
-                    text={formatText(Size.MEDIUM)}
-                    size='flat'
-                    isActive={Size.MEDIUM == activeSize}
-                    onClick={() => onSetSize(Size.MEDIUM)}
-                />
-            </div>
-            <div className='control-grid-size__button'>
-                <Button 
-                    text={formatText(Size.LARGE)}
-                    size='flat'
-                    isActive={Size.LARGE == activeSize}
-                    onClick={() => onSetSize(Size.LARGE)}
-                />
-            </div>   
+            <ControlGrid title='grid size:'>
+                { renderButtonItems(activeSize, onSetSize) }
+            </ControlGrid>
         </div>
-    );
-}
+    ); 
+} 
+
+export default ControlGridSize;
