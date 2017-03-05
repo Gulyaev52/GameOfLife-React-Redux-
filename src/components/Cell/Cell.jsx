@@ -1,10 +1,11 @@
 import React from 'react';
 import './Cell.styl';
 
-export default function Cell({ onToggleState, pos, isAlive, size='small' }) {
-    const modifiers = [
-        `cell_size_${size}`, 
-        isAlive ? 'cell_state_alive' : 'cell_state_dead'
+
+export default function Cell({ onToggleState, pos, state, size='small' }) {
+    const modifiers = [ 
+        `cell_size_${size}`,
+        `cell_state_${state}`
     ].join(' ');
     
     return (

@@ -3,18 +3,16 @@ import { toggleStateCell } from '../actions';
 import * as Size from '../constants/Size';
 import Universe from '../components/Universe/Universe';
 
-const getSizeCell = (activeSize) => {
-    switch(activeSize) {
-        case Size.SMALL: return 'large';
-        case Size.MEDIUM: return 'medium';
-        case Size.LARGE: return 'small';
-    }
-};
+const classNamesSizeCell = {
+    [Size.SMALL]: 'large',
+    [Size.MEDIUM]: 'medium',
+    [Size.LARGE]: 'small'
+}; 
 
 const mapStateToProps = (state) => {
     return {
         grid: state.getIn(['universe', 'grid']),
-        sizeCell: getSizeCell(state.get('size'))
+        sizeCell: classNamesSizeCell[(state.get('size'))]
     };
 };
 

@@ -1,7 +1,18 @@
 import { Map } from 'immutable';
+import * as CellStates from '../constants/CellStates';
 
-export const makeCell = (alive=false) => Map({ alive });
 
-export const isAlive = cell => cell.get('alive');
+export const makeCell = (state=CellStates.DEAD) => Map({ state }); 
 
-export const toggleAlive = cell => cell.set('alive', !cell.get('alive'));
+export const isLive = cell => (
+    cell.get('state') == CellStates.ALIVE || cell.get('state') == CellStates.OLD
+);
+
+export const toggleAlive = (cell) => { 
+    if (isLive(cell)) {
+        return cell.set('state', CellStates.DEAD);
+    }
+    else {
+        return cell.set('state', CellStates.ALIVE);
+    }
+};

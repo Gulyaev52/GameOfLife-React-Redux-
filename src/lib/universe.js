@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable';
 import { makeGrid, mapGrid, getCell, toString as toStringGrid, changeSize as changeSizeGrid } from './grid';
-import { toggleAlive, isAlive, makeCell } from './cell';
+import { toggleAlive, makeCell, isLive } from './cell';
+import * as CellStates from '../constants/CellStates';
 
 const direction = {
     BOTTOM: -1,
@@ -38,21 +39,32 @@ const clear = (universe) => (
     universe.set('grid', makeGrid(universe.get('height'), universe.get('width')))
 );
 
+const determineState = (cell, numAliveNeighbors) => {
+    let state = CellStates.DEAD;
+
+    if (isLive(cell)) {
+        if (numAliveNeighbors != 2 && numAliveNeighbors != 3) { 
+            state = CellStates.DEAD;
+        }
+        else {
+            state = CellStates.OLD;
+        }
+    }
+    else if (numAliveNeighbors == 3) { 
+        state = CellStates.ALIVE;
+    } 
+
+    return state;
+};
+
 const nextGeneration = (universe) => (
     universe.update('grid', (grid) => (
         mapGrid(grid, (cell, x, y) => { 
             const numAliveNeighbors = countAliveNeighbors(grid, x, y);
 
-            if (isAlive(cell)) {
-                if (numAliveNeighbors != 2 && numAliveNeighbors != 3) { 
-                    return makeCell(false);
-                }
-            }
-            else if (numAliveNeighbors == 3) { 
-                return makeCell(true);
-            } 
+            const state = determineState(cell, numAliveNeighbors);
             
-            return cell;
+            return makeCell(state);
         })
     ))
 );
@@ -66,7 +78,7 @@ function countAliveNeighbors(grid, x, y) {
 }
 
 function getAliveNeighbors(neighbors) {
-    return neighbors.filter(isAlive);
+    return neighbors.filter(isLive);
 } 
 
 function getNeighbors(grid, x, y) {
